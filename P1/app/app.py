@@ -1,7 +1,8 @@
 #./app/app.py
 from math import sqrt
 import random
-from flask import Flask
+import re
+from flask import Flask, render_template
 app = Flask(__name__)
 
 def generarCadena():
@@ -82,3 +83,35 @@ def cochetes_input(cadena):
     return "La cadena "+ cadena +" está balanceada"
   else:
     return "La cadena "+ cadena +" no está balanceada"
+
+@app.route('/espacioMayus/<cadena>')
+def espacio_mayus(cadena):
+  if bool(re.match(pattern="[a-zA-Z]*\s[A-Z]([a-z][a-zA-Z]*)?", string=cadena)):
+    return "La cadena " + cadena + " si tiene una palabra seguida de una palabra seguida de un espacio y una unica letra mayucula."
+  else:
+    return "La cadena " + cadena + " no tiene una palabra seguida de una palabra seguida de un espacio y una unica letra mayucula."
+
+
+@app.route('/email/<cadena>')
+def email(cadena):
+  if bool(re.match(pattern="^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$", string=cadena)):
+    return "La cadena " + cadena + " es un email valido."
+  else:
+    return "La cadena " + cadena + " no es un email valido."
+
+
+@app.route('/creditCard/<cadena>')
+def credit_card(cadena):
+  if bool(re.match(pattern="([0-9]{4}(\s|-)){3}[0-9]{4}", string=cadena)):
+    return "La cadena " + cadena + " es un numero de tarjeta de credito valido."
+  else:
+    return "La cadena " + cadena + " no es un numero de tarjeta de credito valido."
+
+
+@app.route('/image')
+def load_image():
+  return render_template('image.html')
+
+@app.errorhandler(404)
+def error404(error):
+  return render_template('404.html')
