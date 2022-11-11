@@ -1,0 +1,1 @@
+GET http://localhost:8000/media/fotos/pollo-al-curry.jpg HTTP/1.1

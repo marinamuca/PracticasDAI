@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1 class="mt-5">Resultados de Busqueda</h1>
+    <table class="table {% if modo_oscuro %}table-dark{% endif %}">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Preparacion</th>
+            {# <th scope="col">Handle</th> #}
+          </tr>
+        </thead>
+        <tbody>
+          {% for receta in recetas %}
+            <tr>
+                <th scope="row">{{ receta.id }}</th>
+                <td><a class="{% if modo_oscuro %}link-info{% endif %} "href="{% url 'detalle' receta.id %}">{{ receta.nombre }}</a></td>
+                <td>{{ receta.preparación }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}      
