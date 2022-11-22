@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if receta %}
+    <h1 class="mt-4">Editar {{ receta.nombre }}</h1>
+{% else %}
+    <h1 class="mt-4">Añadir Nueva Receta</h1>
+{% endif %}
+<form method="POST" >{% csrf_token %}
+    <div class="d-grid gap-2 ">
+        {{ formReceta|crispy }}
+        {% comment %} {{ formIngrediente|crispy }} {% endcomment %}
+        <input class="btn {% if modo_oscuro %}btn-outline-info {% else %} btn-outline-primary{% endif %} col-1" type="submit" value="Añadir">
+    </div>
+</form>
+{% endblock %}

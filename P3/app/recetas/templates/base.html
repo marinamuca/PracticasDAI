@@ -10,6 +10,7 @@
  
     <!-- Latest Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/35f230cea2.js" crossorigin="anonymous"></script>
     <title>Practica 3</title>
   </head>
   <body class="{% if modo_oscuro %}bg-dark text-white{% endif %}">
@@ -39,7 +40,19 @@
         {% block content %}
             <h1 class="mt-5">¡Hola, {{ saludado }}!</h1>
             <h4 class="mt-5">¡Estas visualizando la página en modo {% if modo_oscuro %} oscuro{% else %} claro{% endif %}!</h4>
-        {% endblock %}      
+        {% endblock %}  
+
+        {% if messages %}
+            <div class="d-grid gap-2 col-6 mx-auto position-absolute bottom-0 start-50 translate-middle ">
+              {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                  <i class="fa-solid fa-circle-check"></i>
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            </div>  
+        {% endif %}   
     </div>
    
 
