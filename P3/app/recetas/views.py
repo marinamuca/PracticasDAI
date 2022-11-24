@@ -5,6 +5,7 @@ from .models import Receta, Foto, Ingrediente
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 # Create your views here.
 
 def index(request):
@@ -54,47 +55,31 @@ def mode(request):
 # ** P3.3
 
 def receta_new(request):
-    if request.method == "POST":
-        formReceta = RecetaForm(request.POST)
-        # formIngrediente = IngredienteForm(request.POST)
-        if formReceta.is_valid():
-            receta = formReceta.save()
-            # ingrediente = formIngrediente.save(commit=False)
-            # ingrediente.receta = receta
-            # ingrediente.save()
-
+    formReceta = RecetaForm(request.POST or None)
+    
+    if formReceta.is_valid():
+        receta = formReceta.save()
         messages.add_message(request, messages.SUCCESS, 'Receta ' + receta.nombre + ' añadida correctamente.')
         return redirect('detalle', id_receta=receta.id)
-    else:
-        formReceta = RecetaForm
-        formIngrediente = IngredienteForm
-        context = {
-            # 'receta': receta[0],
-            # 'imagenes': imagenes,
-            # 'ingredientes': ingredientes,
-            'formReceta': formReceta,
-            'formIngrediente': formIngrediente,
-            'modo_oscuro': request.session['dark_mode']
-        }
-        return render(request, "addReceta.html", context)
+
+    context = {
+        'formReceta': formReceta,
+        'modo_oscuro': request.session['dark_mode']
+    }
+    return render(request, "addReceta.html", context)
 
 def receta_edit(request, id_receta):
     receta = Receta.objects.get(id=id_receta)
-    if request.method == 'POST':
-        form = RecetaForm(request.POST, instance=receta)
-        if form.is_valid():
-            # update the existing `Band` in the database
-            form.save()
-            # redirect to the detail page of the `Band` we just updated
-            messages.add_message(request, messages.SUCCESS, 'Receta ' + receta.nombre + ' editada correctamente.')
-            return redirect('detalle', id_receta=receta.id)
+ 
+    formReceta = RecetaForm(request.POST or None, instance=receta)
+    if formReceta.is_valid():
+        formReceta.save()
+        messages.add_message(request, messages.SUCCESS, 'Receta ' + receta.nombre + ' editada correctamente.')
+        return redirect('detalle', id_receta=receta.id)
         
-    formReceta = RecetaForm(instance=receta)
     formIngrediente = IngredienteForm
     context = {
         'receta': receta,
-        # 'imagenes': imagenes,
-        # 'ingredientes': ingredientes,
         'formReceta': formReceta,
         'formIngrediente': formIngrediente,
         'modo_oscuro': request.session['dark_mode']

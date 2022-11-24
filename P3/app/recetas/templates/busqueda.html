@@ -7,7 +7,6 @@
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">Preparacion</th>
-            {# <th scope="col">Handle</th> #}
           </tr>
         </thead>
         <tbody>
@@ -15,7 +14,7 @@
             <tr>
                 <th scope="row">{{ receta.id }}</th>
                 <td><a class="{% if modo_oscuro %}link-info{% endif %}" href="{% url 'detalle' receta.id %}">{{ receta.nombre }}</a></td>
-                <td>{{ receta.preparación }}</td>
+                <td>{{ receta.preparacion }}</td>
                 {% comment %} * EDIT / DELETE BUTTONS * {% endcomment %}
                 <td><a class="{% if modo_oscuro %}link-info{% endif %}" href={% url 'receta_edit' receta.id %}>
                   <i class="fa-solid fa-pen-to-square"/>
@@ -31,9 +30,6 @@
                   <div class="modal-header justify-content-center">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Quieres eliminar la receta {{ receta.nombre }}? </h1>
                   </div>
-                  {% comment %} <div class="modal-body">
-                   
-                  </div> {% endcomment %}
                   <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <a class="btn btn-danger" href="{% url 'receta_delete' receta.id %}">Eliminar</a>

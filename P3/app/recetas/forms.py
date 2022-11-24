@@ -2,16 +2,19 @@ from django import forms
 # from crispy_forms.helper import FormHelper
 # from crispy_forms.layout import Submit
 from .models import Receta, Ingrediente
+from django.core.exceptions import ValidationError
+import re
 
 class RecetaForm(forms.ModelForm):
-     class Meta:
-        model = Receta
-        fields = ('__all__')
+      class Meta:
+         model = Receta
+         fields = ('__all__')
+      
 
 class IngredienteForm(forms.ModelForm):
-     class Meta:
-        model = Ingrediente
-        fields = ('nombre', 'cantidad', 'unidades')
+      class Meta:
+         model = Ingrediente
+         fields = ('nombre', 'cantidad', 'unidades')
 
         # def __init__(self, *args, **kwargs):
         #     super().__init__(*args, **kwargs)
