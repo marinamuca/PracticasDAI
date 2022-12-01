@@ -1,4 +1,5 @@
 # requirements.txt
 django==4.1.1
 django-crispy-forms>=1.14.0 
-crispy-bootstrap5=0.7
+crispy-bootstrap5==0.7
+django-allauth==0.43.0

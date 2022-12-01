@@ -39,6 +39,14 @@ INSTALLED_APPS = (
   'django.contrib.sessions',
   'django.contrib.messages',
   'django.contrib.staticfiles',
+
+  'django.contrib.sites',  # new
+
+  'allauth',  # new
+  'allauth.account',  # new
+  'allauth.socialaccount',  # new
+  'allauth.socialaccount.providers.github',  # new
+
   'recetas.apps.RecetasConfig',
   'crispy_forms',
 )
@@ -60,7 +68,7 @@ ROOT_URLCONF = 'mi_sitio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,3 +147,14 @@ MESSAGE_TAGS = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LOGIN_REDIRECT_URL = 'home'

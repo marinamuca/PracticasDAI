@@ -15,7 +15,7 @@
   </head>
   <body class="{% if modo_oscuro %}bg-dark text-white{% endif %}">
     
-    <nav class="navbar navbar-expand-sm {% if modo_oscuro %}navbar-dark bg-secondary"{% else %}navbar-light" style="background-color: #e3f2fd;"{% endif %}">
+    <nav class="navbar navbar-expand-lg {% if modo_oscuro %}navbar-dark bg-secondary"{% else %}navbar-light" style="background-color: #e3f2fd;"{% endif %}">
         <div class="container-fluid">
           <a class="navbar-brand" href="/">Practica 3</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,19 +27,34 @@
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_input">
               <button class="btn {% if modo_oscuro %}btn-outline-light {% else %} btn-outline-primary{% endif %}" type="submit">Search</button>
             </form>
-    
 
-          <form class="form-check form-switch" method="get" action="{% url 'mode' %}" id="mode_switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="dark_mode" {% if modo_oscuro %} checked style="background-color: black; border-color:black;"{% else %}{% endif %}>
-            <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode</label>
-          </form>
+          <div class="d-flex align-items-center">
+            <form class="form-check form-switch" method="get" action="{% url 'mode' %}" id="mode_switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="dark_mode" {% if modo_oscuro %} checked style="background-color: black; border-color:black;"{% else %}{% endif %}>
+              <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode</label>
+            </form>
+  
+            {% if user.is_authenticated %}
+              <a href="{% url 'account_logout' %}" class="btn {% if modo_oscuro %}btn-outline-light {% else %} btn-outline-primary{% endif %} ms-3 me-2">Cerrar Sesión</a> 
+            {% else %}
+              <a href="{% url 'account_login' %}" class="btn {% if modo_oscuro %}btn-outline-info {% else %} btn-outline-primary{% endif %} ms-3">Iniciar Sesión</a> 
+              <a href="{% url 'account_signup' %}" class="btn {% if modo_oscuro %}btn-outline-light {% else %} btn-outline-secondary{% endif %} ms-3 me-2">Registrarse</a> 
+            {% endif %}
+            
+          </div>
         </div>
     </nav>
 
+    {% load socialaccount %}
+
     <div class="container">
         {% block content %}
-            <h1 class="mt-5">¡Hola, {{ saludado }}!</h1>
-            <h4 class="mt-5">¡Estas visualizando la página en modo {% if modo_oscuro %} oscuro{% else %} claro{% endif %}!</h4>
+            {% if user.is_authenticated %}
+              <h1 class="mt-5">¡Hola, {{ user.username }}!</h1>
+              <h4 class="mt-5">¡Estas visualizando la página en modo {% if modo_oscuro %} oscuro{% else %} claro{% endif %}!</h4>
+            {% else %}
+              <a href="{% provider_login_url 'github' %}">Sign Up</a>
+            {% endif %}
         {% endblock %}  
 
         {% if messages %}
