@@ -16,12 +16,14 @@
                 <td><a class="{% if modo_oscuro %}link-info{% endif %}" href="{% url 'detalle' receta.id %}">{{ receta.nombre }}</a></td>
                 <td>{{ receta.preparacion }}</td>
                 {% comment %} * EDIT / DELETE BUTTONS * {% endcomment %}
-                <td><a class="{% if modo_oscuro %}link-info{% endif %}" href={% url 'receta_edit' receta.id %}>
-                  <i class="fa-solid fa-pen-to-square"/>
-                </a></td>
-                <td><a class="{% if modo_oscuro %}link-info{% endif %}" role="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop-delete-{{ receta.id }}">
-                  <i class="fa-solid fa-trash"></i>
-                </a></td>
+                {% if user.is_staff %}
+                  <td><a class="{% if modo_oscuro %}link-info{% endif %}" href={% url 'receta_edit' receta.id %}>
+                    <i class="fa-solid fa-pen-to-square"/>
+                  </a></td>
+                  <td><a class="{% if modo_oscuro %}link-info{% endif %}" role="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop-delete-{{ receta.id }}">
+                    <i class="fa-solid fa-trash"></i>
+                  </a></td>
+                {% endif %}
             </tr>
             {% comment %} * MODAL * {% endcomment %}
             <div class="modal fade" id="staticBackdrop-delete-{{ receta.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -41,9 +43,12 @@
         </tbody>
       </table>
 
-      <div class="d-grid gap-2 col-6 mx-auto">
-      <a class="btn {% if modo_oscuro %}btn-outline-info {% else %} btn-outline-primary{% endif %}" href={% url 'receta_new' %}>
-        <span>Añadir Nueva receta</span>
-      </a>
-    </div>
+      {% if user.is_staff %}
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <a class="btn {% if modo_oscuro %}btn-outline-info {% else %} btn-outline-primary{% endif %}" href={% url 'receta_new' %}>
+            <span>Añadir Nueva receta</span>
+          </a>
+        </div>
+      {% endif %}
+    
 {% endblock %}      
