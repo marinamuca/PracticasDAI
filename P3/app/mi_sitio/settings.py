@@ -49,6 +49,7 @@ INSTALLED_APPS = (
 
   'recetas.apps.RecetasConfig',
   'crispy_forms',
+  'django_bootstrap5'
 )
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -157,4 +158,4 @@ SITE_ID = 1
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/'

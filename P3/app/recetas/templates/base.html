@@ -53,7 +53,7 @@
               <h1 class="mt-5">¡Hola, {{ user.username }}!</h1>
               <h4 class="mt-5">¡Estas visualizando la página en modo {% if modo_oscuro %} oscuro{% else %} claro{% endif %}!</h4>
             {% else %}
-              <a href="{% provider_login_url 'github' %}">Sign Up</a>
+              <h1 class="mt-5">¡No estas registrado, Regístrate o inica sesión!</h1>
             {% endif %}
         {% endblock %}  
 
