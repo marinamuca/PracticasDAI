@@ -1,0 +1,99 @@
+GET http://localhost:5000/api/recipes
+
+###
+
+GET http://localhost:5000/api/recipes/5f7b4b66933b475afc75430e
+
+###
+
+GET http://localhost:5000/api/recipes?con=vodka
+
+###
+
+POST http://localhost:5000/api/recipes
+
+{
+    "ingredients": [],
+    "instructiones": [],
+    "name": "Baileys con puleva",
+    "slug": "baileys-con-puleva"
+}
+
+###
+
+DELETE http://localhost:5000/api/recipes/63469ebd54742e17f6b6aef8
+
+###
+
+PUT  http://localhost:5000/api/recipes/63469ebd54742e17f6b6aef8
+
+{
+    "ingredients": [
+        {
+            "name": "Baileys",
+            "quantity": {
+                "unit": "oz",
+                "value": "1 1/2"
+            }
+        },
+        {
+            "name": "Puleva",
+            "quantity": {
+                "unit": "brick",
+                "value": "1"
+            }
+        }
+    ]
+}
+
+###
+
+GET  http://localhost:5000/api/v2/recipes
+
+###
+
+GET http://localhost:5000/api/v2/recipes/5f7b4b66933b475afc75430e
+
+###
+
+GET http://localhost:5000/api/v2/recipes?con=vodka
+
+###
+
+POST http://localhost:5000/api/v2/recipes
+
+{
+    "ingredients": [],
+    "instructiones": [],
+    "name": "Receta",
+    "slug": "receta"
+}
+
+###
+
+DELETE http://localhost:5000/api/v2/recipes/6346a8fa670093b8cdfe0229
+
+###
+
+PUT  http://localhost:5000/api/v2/recipes/6346a913670093b8cdfe022a
+
+{
+    "ingredients": [
+        {
+            "name": "Ingr1",
+            "quantity": {
+                "unit": "oz",
+                "value": "1 1/2"
+            }
+        },
+        {
+            "name": "Ingr2",
+            "quantity": {
+                "unit": "",
+                "value": "1"
+            }
+        }
+    ]
+}
+
+###
