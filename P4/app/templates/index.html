@@ -55,7 +55,7 @@
   
     function detalle(i) {  // saca un modal con la información de cada coctel
       // saca un modal con receta[i]
-      var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+      var myModal = new bootstrap.Modal(document.getElementById('modalDetail'))
       myModal.show();
 
       var modalTitle = "Titulo Modal";
@@ -84,12 +84,9 @@
     }
 
     function showModal() {
-      var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+      var myModal = new bootstrap.Modal(document.getElementById('modalEdit'))
       myModal.show();
-      document.getElementById('instructions').innerHTML = ""
-      document.getElementById('ingredients').innerHTML = ""
-      document.getElementById('modalTitle').innerHTML = "Nueva Receta";
-
+      document.getElementById('modalTitle').innerHTML = receta.name;
     }
         
   </script>
