@@ -2,7 +2,7 @@ GET http://localhost:5000/api/recipes
 
 ###
 
-GET http://localhost:5000/api/recipes/5f7b4b66933b475afc75430e
+GET http://localhost:5000/api/recipes
 
 ###
 

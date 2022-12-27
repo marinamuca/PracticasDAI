@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-grid gap-2 col-2 mx-auto">
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  onclick="showModal()">
+    Añadir Nueva Receta
+  </button>
+</div>
+ 
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th>N</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+    
+        </tbody>
+    </table>
+      
+    {% include "modal.html" %}
+{% endblock content %}
+
+{% block script %}
+<script>
+    const recetas = []              // declaraciones   
+    let html_str  = ''              // de variables
+    let i         = 0               //
+    // fetch devuelve una promise
+    fetch('/api/recipes')           // GET por defecto,
+    .then(res => res.json())        // respuesta en json, otra promise
+    .then(filas => {                // arrow function
+        filas.forEach(fila => {     // bucle ES6, arrow function
+            i++
+            recetas.push(fila)      // se guardan para después sacar cada una             
+            // ES6 templates
+            html_str += `<tr>
+                           <td>${i}</td>
+                           <td>
+                              <button onclick="detalle('${i-1}')" 
+                                    type="button" class="btn btn-outline btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#detailModal">
+                              ${fila.name}
+                           </button>
+                    </td>
+                    <td>
+                    <button type="button" class="btn btn-warning btn-sm">Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                    </tr>`         // ES6 templates
+        });
+        document.getElementById('tbody').innerHTML=html_str  // se pone el html en su sitio
+    })
+  
+    function detalle(i) {  // saca un modal con la información de cada coctel
+      // saca un modal con receta[i]
+      var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+      myModal.show();
+
+      var modalTitle = "Titulo Modal";
+      var receta = recetas[i];
+      document.getElementById('modalTitle').innerHTML = receta.name;
+        
+      // Añado los ingredientes
+      document.getElementById('ingredients').innerHTML = ""
+
+      receta.ingredients.forEach(ingredient => {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(ingredient.name));
+
+        document.getElementById('ingredients').append(li);
+      })
+      
+      // Añado las instrucciones
+      document.getElementById('instructions').innerHTML = ""
+
+      receta.instructions.forEach(instruction => {
+        var paragraph  = document.createElement("p");
+        paragraph.innerHTML = "- " + instruction;
+        document.getElementById('instructions').append(paragraph);
+      })
+
+    }
+
+    function showModal() {
+      var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+      myModal.show();
+      document.getElementById('instructions').innerHTML = ""
+      document.getElementById('ingredients').innerHTML = ""
+      document.getElementById('modalTitle').innerHTML = "Nueva Receta";
+
+    }
+        
+  </script>
+{% endblock script %}

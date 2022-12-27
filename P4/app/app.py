@@ -6,7 +6,7 @@ from xmlrpc.client import ResponseError
 from bson.json_util import dumps
 from pymongo import MongoClient
 from bson import ObjectId
-from flask import Flask, Response, request, jsonify
+from flask import Flask, Response, request, jsonify, render_template
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
@@ -151,6 +151,10 @@ class RecipesID(Resource):
         eliminado = buscar(id)
         db.recipes.delete_one({'_id': ObjectId(id)})
         return eliminado
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 api.add_resource(Recipes, '/api/v2/recipes')
 api.add_resource(RecipesID, '/api/v2/recipes/<id>')
