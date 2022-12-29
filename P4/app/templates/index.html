@@ -45,8 +45,8 @@
                            </button>
                     </td>
                     <td>
-                    <button type="button" class="btn btn-warning btn-sm">Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="button" class="btn btn-warning btn-sm" >Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteModal('${i-1}')">Delete</button>
                     </td>
                     </tr>`         // ES6 templates
         });
@@ -58,7 +58,6 @@
       var myModal = new bootstrap.Modal(document.getElementById('modalDetail'))
       myModal.show();
 
-      var modalTitle = "Titulo Modal";
       var receta = recetas[i];
       document.getElementById('modalTitle').innerHTML = receta.name;
         
@@ -87,6 +86,51 @@
       var myModal = new bootstrap.Modal(document.getElementById('modalEdit'))
       myModal.show();
       document.getElementById('modalTitle').innerHTML = receta.name;
+    }
+
+    function submitRecipe(){
+
+      var name = document.getElementById('inputName').value;
+      var ingredientesInput = document.getElementById('inputIngredients').value;
+      var instruccionesInput = document.getElementById('inputInstructions').value;
+
+      var ingredients = []
+      ingredientesInput.split('\n').forEach(ingredient => {
+        ingredients.push({
+          'name': ingredient
+        })
+      })
+
+      console.log(ingredients)
+      var instructions = instruccionesInput.split('\n');
+
+      var data = {
+        'name': name,
+        'ingredients': ingredients,
+        'instructions': instructions
+      }
+
+      fetch('api/recipes', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).then(
+        window.location = "/"
+      )
+      
+    }
+
+    function deleteRecipe(i){
+      fetch('api/recipes/' + recetas[i]._id, {
+        method: 'DELETE',
+      }).then(
+        window.location = "/"
+      )
+    }
+
+    function deleteModal(i) {
+      var myModal = new bootstrap.Modal(document.getElementById('modalDelete'))
+      myModal.show();
+      // document.getElementById('modalTitle').innerHTML = "¿Eliminar " + recetas[i] + "?";
     }
         
   </script>
