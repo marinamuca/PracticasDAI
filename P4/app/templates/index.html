@@ -113,9 +113,10 @@
       fetch('api/recipes', {
         method: 'POST',
         body: JSON.stringify(data),
-      }).then(
+      }).then(response => {
+        console.log(response)
         window.location = "/"
-      )
+      })
       
     }
 
@@ -130,7 +131,10 @@
     function deleteModal(i) {
       var myModal = new bootstrap.Modal(document.getElementById('modalDelete'))
       myModal.show();
-      // document.getElementById('modalTitle').innerHTML = "¿Eliminar " + recetas[i] + "?";
+      document.getElementById('deleteTitle').innerHTML = "¿Eliminar " + recetas[i].name + "?";
+      document.getElementById('deleteButton').onclick = () => {
+        deleteRecipe(i)
+      };
     }
         
   </script>
