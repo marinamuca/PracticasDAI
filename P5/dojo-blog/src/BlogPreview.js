@@ -1,4 +1,4 @@
-const BlogInfo = ({blog, handleDelete}) => {
+const BlogPreview = ({blog, handleDelete}) => {
     return (
         <div className="blog-preview">
             <h2>{blog.title}</h2>
@@ -8,4 +8,4 @@ const BlogInfo = ({blog, handleDelete}) => {
     );
 }
 
-export default BlogInfo;
+export default BlogPreview;
