@@ -28,6 +28,7 @@
   margin-left: 16px;
   text-decoration: none;
   padding: 6px;
+  color: #4d4d4d;
 }
 
 .navbar a:hover {
@@ -43,7 +44,7 @@
 /* blog previews / list */
 .blog-preview {
   padding: 10px 16px;
-  margin: 20px 0;
+  margin: 10px 0;
   border-bottom: 1px solid #fafafa;
 }
 .blog-preview:hover {
