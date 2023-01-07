@@ -12,13 +12,33 @@
    
     <title>Practica 4: Cockteles API</title>
   </head>
-<body>
-    <nav class="navbar navbar-light bg-light">
+<body class="fs-6">
+    <nav class="navbar " id="navBar">
         <div class="container">
             <span class="navbar-brand mb-0 ml-5 h1">Práctica 4</span>
+          
+
+            <div class="d-flex">
+              <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_input">
+              <button class="btn btn-outline-primary" type="submit" onclick="handleSearch()">Search</button>
+            </div>      
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="switchMode" name="dark_mode" onchange="darkModeSwitch()">
+              <label class="form-check-label" for="switchMode">Dark Mode</label>
+            </div>
+            
         </div>
     </nav>
-    <div class="container">
+    <div class="container mt-3">
+      <div class="input-group mb-3">
+        <label class="input-group-text fs-6" for="fontSize">Tamaño de texto</label>
+        <select class="form-select fs-6" id="fontSize" onchange="handleSizeChange()">
+          <option value="fs-6">Pequeño</option>
+          <option value="fs-5">Mediano</option>
+          <option value="fs-4">Grande</option>
+        </select>
+      </div>
         {% block content %}
         {% endblock %}
     </div>

@@ -6,7 +6,7 @@
   </button>
 </div>
  
-    <table class="table table-sm">
+    <table class="table table-sm" id="recipesTable">
         <thead>
         <tr>
             <th>N</th>
@@ -24,35 +24,61 @@
 
 {% block script %}
 <script>
-    const recetas = []              // declaraciones   
-    let html_str  = ''              // de variables
-    let i         = 0               //
-    // fetch devuelve una promise
-    fetch('/api/recipes')           // GET por defecto,
-    .then(res => res.json())        // respuesta en json, otra promise
-    .then(filas => {                // arrow function
-        filas.forEach(fila => {     // bucle ES6, arrow function
-            i++
-            recetas.push(fila)      // se guardan para después sacar cada una             
-            // ES6 templates
-            html_str += `<tr>
-                           <td>${i}</td>
-                           <td>
-                              <button onclick="detalle('${i-1}')" 
-                                    type="button" class="btn btn-outline btn-sm"
-                                    data-bs-toggle="modal" data-bs-target="#detailModal">
-                              ${fila.name}
-                           </button>
-                    </td>
-                    <td>
-                    <button type="button" class="btn btn-warning btn-sm" >Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteModal('${i-1}')">Delete</button>
-                    </td>
-                    </tr>`         // ES6 templates
-        });
-        document.getElementById('tbody').innerHTML=html_str  // se pone el html en su sitio
+    var recetas = []              // declaraciones   
+
+    setRecipes("/api/recipes").then ( () => {
+      if(sessionStorage.getItem("mode") == null)
+            sessionStorage.setItem("mode", false);
+          else if (sessionStorage.getItem("mode") == "true"){
+            document.getElementById("switchMode").checked = true;
+            toggleDarkMode();
+          }
+
+          // Para cambiar letra en todos los botones 
+          document.querySelectorAll(".btn").forEach(button => {
+            button.classList.add("fs-6")
+          })
+
+          if(sessionStorage.getItem("size") == null)
+            sessionStorage.setItem("size", "fs-6");
+          else {
+            changeFontSize(sessionStorage.getItem("size"));
+            document.getElementById("fontSize").value = sessionStorage.getItem("size");
+          }
     })
-  
+
+    function setRecipes(url){
+      recetas = []
+      let html_str  = ''              // de variables
+      let i         = 0               //
+      // fetch devuelve una promise
+      fetch(url)           // GET por defecto,
+      .then(res => res.json())        // respuesta en json, otra promise
+      .then(filas => {                // arrow function
+          filas.forEach(fila => {     // bucle ES6, arrow function
+              i++
+              recetas.push(fila)      // se guardan para después sacar cada una             
+              // ES6 templates
+              html_str += `<tr>
+                            <td>${i}</td>
+                            <td>
+                                <button onclick="detalle('${i-1}')" 
+                                      type="button" class="btn btn-outline btn-sm"
+                                      data-bs-toggle="modal" data-bs-target="#detailModal">
+                                ${fila.name}
+                            </button>
+                      </td>
+                      <td>
+                      <button type="button" class="btn btn-warning btn-sm" onclick="editModal('${i-1}')">Edit</button>
+                      <button type="button" class="btn btn-danger btn-sm" onclick="deleteModal('${i-1}')">Delete</button>
+                      </td>
+                      </tr>`         // ES6 templates
+          });
+          document.getElementById('tbody').innerHTML=html_str  // se pone el html en su sitio
+      })
+    }
+    
+
     function detalle(i) {  // saca un modal con la información de cada coctel
       // saca un modal con receta[i]
       var myModal = new bootstrap.Modal(document.getElementById('modalDetail'))
@@ -83,13 +109,14 @@
     }
 
     function showModal() {
+      document.getElementById('inputName').value = "";
+      document.getElementById('inputIngredients').value = "";
+      document.getElementById('inputInstructions').value = "";
       var myModal = new bootstrap.Modal(document.getElementById('modalEdit'))
       myModal.show();
-      document.getElementById('modalTitle').innerHTML = receta.name;
     }
 
-    function submitRecipe(){
-
+    function generateData(){
       var name = document.getElementById('inputName').value;
       var ingredientesInput = document.getElementById('inputIngredients').value;
       var instruccionesInput = document.getElementById('inputInstructions').value;
@@ -107,8 +134,15 @@
       var data = {
         'name': name,
         'ingredients': ingredients,
-        'instructions': instructions
+        'instructions': instructions,
+        'slug': name.toLowerCase().replaceAll(" ", "-")
       }
+
+      return data;
+    }
+
+    function submitRecipe(){
+      var data = generateData();
 
       fetch('api/recipes', {
         method: 'POST',
@@ -136,6 +170,98 @@
         deleteRecipe(i)
       };
     }
+
+    function editRecipe(i){
+      var data = generateData();
+
+      fetch('api/recipes/' + recetas[i]._id, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }).then(response => {
+        console.log(response)
+        window.location = "/"
+      })
+
+    }
+
+    function editModal(i) {
+      var myModal = new bootstrap.Modal(document.getElementById('modalEdit'))
+      myModal.show();
+      document.getElementById('editTitle').innerHTML = "Editar " + recetas[i].name;
+
+      document.getElementById('inputName').value = recetas[i].name;
+
+      var instruccionsRecipe = ""
+
+      recetas[i].instructions.forEach(instruction => {
+        instruccionsRecipe += instruction + "\n"
+      })
+
+      document.getElementById('inputInstructions').value = instruccionsRecipe;
+
+      var ingredientsRecipe = ""
+      recetas[i].ingredients.forEach(ingredient => {
+        ingredientsRecipe += ingredient.name + "\n"
+      })
+
+      document.getElementById('inputIngredients').value = ingredientsRecipe;
+
+
+      document.getElementById('submitEditButton').onclick = () => {
+        editRecipe(i);
+      };
+      
+    }
+
+    function darkModeSwitch(){
+      if (sessionStorage.getItem("mode") == "false")
+        sessionStorage.setItem("mode", true);
+      else
+        sessionStorage.setItem("mode", false);
+      toggleDarkMode();
+    }
         
+    function toggleDarkMode(){
+      document.body.classList.toggle("bg-dark");
+      document.body.classList.toggle("text-white");
+      document.getElementById("recipesTable").classList.toggle("table-dark");
+      document.getElementById("navBar").classList.toggle("navbar-dark");
+      document.getElementById("navBar").classList.toggle("bg-secondary");
+      document.querySelectorAll(".btn-outline").forEach(button => {
+        button.classList.toggle("btn-dark");
+      })
+      document.querySelectorAll(".btn-outline-primary").forEach(button => {
+        button.classList.toggle("btn-outline-light");
+      })
+    }
+
+    function changeFontSize(newSize){
+      document.querySelectorAll('[class*="fs-"]').forEach( element => {
+        console.log(element)
+        element.classList.forEach(classname => {
+          if (classname.startsWith("fs-")){
+            element.classList.replace(classname, newSize);
+          }
+        })
+      })  
+    }
+
+    function handleSizeChange(){
+      var newSize = document.getElementById("fontSize").value;
+      changeFontSize(newSize);
+      sessionStorage.setItem("size", newSize);
+    }
+
+    function handleSearch(){
+      let searchInput = document.getElementById("searchInput");
+      let query = searchInput.value;
+      let url = '/api/recipes';
+
+      if(query != '')
+        url = '/receta_de/' + query
+
+      setRecipes(url);
+    }
+
   </script>
 {% endblock script %}

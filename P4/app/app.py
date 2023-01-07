@@ -52,7 +52,13 @@ def mongo():
 @app.route('/receta_de/<slug>')
 def receta_de(slug):
     regexpr = "(?i)" + slug.replace("_", "-")
-    response = db.recipes.find({"slug":  {"$regex": regexpr } })
+    recipes = db.recipes.find({"slug":  {"$regex": regexpr } })
+    response = []
+
+    for recipe in recipes:
+        recipe['_id'] = str(recipe['_id'])
+        response.append(recipe);
+
     resJson = dumps(response)
     return Response(resJson, mimetype='application/json')
 
